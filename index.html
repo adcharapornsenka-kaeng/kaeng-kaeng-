@@ -1,0 +1,711 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KANG ONLINE V11.0</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #082b25;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  text-align: center;
+  background: #061d19;
+  padding: 18px;
+}
+
+h1 {
+  margin: 0;
+  color: #edcb80;
+  font-size: 26px;
+}
+
+small {
+  color: #b8d1c8;
+}
+
+main {
+  max-width: 850px;
+  margin: auto;
+  padding: 12px;
+}
+
+.panel {
+  background: #16483d;
+  border: 1px solid #39715f;
+  border-radius: 14px;
+  padding: 13px;
+  margin: 12px 0;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 5px 0;
+  border: 0;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+button {
+  background: #e8c77d;
+  color: #18241d;
+  border: 0;
+  border-radius: 9px;
+  padding: 11px;
+  font-weight: bold;
+  margin: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+.alt {
+  background: #d3e5df;
+}
+
+.danger {
+  background: #f1a2a2;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+#status {
+  text-align: center;
+  color: #f7d68d;
+  padding: 7px;
+}
+
+.table {
+  background: #0c5742;
+  border: 4px solid #b99653;
+  border-radius: 30px;
+  padding: 12px;
+  margin: 14px 0;
+}
+
+.seats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.seat {
+  background: #123b32;
+  border-radius: 12px;
+  padding: 9px;
+  min-height: 110px;
+}
+
+.seat.me {
+  border: 2px solid #f4d58a;
+}
+
+.seat.turn {
+  box-shadow: 0 0 0 2px #7ae8a6;
+}
+
+.seat b {
+  display: block;
+}
+
+.cards {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #111;
+  border-radius: 6px;
+  width: 39px;
+  height: 56px;
+  font-size: 17px;
+  font-weight: bold;
+  border: 2px solid #ddd;
+}
+
+.card.red {
+  color: #c32d36;
+}
+
+.card.back {
+  background: #285caa;
+  color: white;
+  border-color: #a6c8ff;
+}
+
+.card.selected {
+  transform: translateY(-7px);
+  border: 3px solid #f1bf36;
+}
+
+.card.pick {
+  cursor: pointer;
+}
+
+.pile {
+  border-top: 1px solid #50816c;
+  margin-top: 9px;
+  padding-top: 7px;
+}
+
+.pile .card {
+  width: 27px;
+  height: 39px;
+  font-size: 12px;
+}
+
+.center {
+  text-align: center;
+  padding: 15px;
+}
+
+#hand .card {
+  width: 49px;
+  height: 72px;
+  font-size: 21px;
+}
+
+#messages {
+  max-height: 180px;
+  overflow: auto;
+  background: #082d26;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+#messages div {
+  margin: 5px 0;
+}
+
+#ledger {
+  max-height: 160px;
+  overflow: auto;
+  font-size: 13px;
+}
+
+#ledger div {
+  border-bottom: 1px solid #397360;
+  padding: 6px 0;
+}
+
+.notice {
+  color: #f8d987;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🃏 KANG ONLINE</h1>
+  <small>
+    V11.0 · Online Multiplayer · Virtual Credits
+  </small>
+</header>
+
+<main>
+
+  <div id="status">
+    กำลังเชื่อมต่อเซิร์ฟเวอร์...
+  </div>
+
+  <!-- สร้างห้องและเข้าร่วมห้อง -->
+  <section id="lobby" class="panel">
+    <h3>สร้างห้อง / เข้าร่วมห้อง</h3>
+
+    <input
+      id="name"
+      maxlength="24"
+      placeholder="ชื่อผู้เล่น"
+    >
+
+    <input
+      id="code"
+      maxlength="6"
+      placeholder="รหัสห้อง 6 ตัว"
+    >
+
+    <div class="row">
+      <button id="create">
+        สร้างห้อง
+      </button>
+
+      <button id="join" class="alt">
+        เข้าร่วมห้อง
+      </button>
+    </div>
+
+    <p id="roomInfo"></p>
+  </section>
+
+  <!-- หน้าจอเกม -->
+  <section id="game" class="hidden">
+
+    <div class="panel">
+      <h3 id="roomTitle">
+        ห้องเกม
+      </h3>
+
+      <div id="roundInfo">
+        รอผู้เล่นเข้าร่วม
+      </div>
+
+      <p id="result" class="notice"></p>
+
+      <button id="start" class="hidden">
+        เริ่มเกม (ครบ 5 คน)
+      </button>
+
+      <button id="next" class="hidden">
+        เริ่มรอบถัดไป
+      </button>
+    </div>
+
+    <!-- โต๊ะไพ่ 5 คน -->
+    <div class="table">
+
+      <div id="seats" class="seats"></div>
+
+      <div class="center">
+        <div id="deckInfo">
+          ไพ่กองจั่ว
+        </div>
+
+        <div id="lastCard">
+          ยังไม่มีไพ่ทิ้ง
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ไพ่ของผู้เล่น -->
+    <div class="panel">
+      <h3>🃏 ไพ่ในมือของฉัน</h3>
+
+      <div id="hand" class="cards"></div>
+
+      <p id="myPoints"></p>
+
+      <div class="row">
+
+        <button id="kang" class="danger">
+          แคง
+        </button>
+
+        <button id="draw">
+          จั่วไพ่
+        </button>
+
+        <button id="discard" class="alt">
+          ทิ้งไพ่ที่เลือก
+        </button>
+
+        <button id="follow" class="alt">
+          ตามไพ่
+        </button>
+
+      </div>
+
+      <p>
+        <small>
+          แตะเลือกไพ่ 1–3 ใบที่มีหน้าเดียวกัน
+        </small>
+      </p>
+    </div>
+
+    <!-- เปิดไพ่เมื่อจบรอบ -->
+    <div class="panel">
+      <h3>🏆 ผลการแข่งขัน</h3>
+
+      <div id="showdown">
+        เมื่อจบรอบ ระบบจะเปิดไพ่ของผู้เล่นทุกคน
+      </div>
+    </div>
+
+    <!-- แชท -->
+    <div class="panel">
+      <h3>💬 แชทผู้เล่น</h3>
+
+      <div id="messages"></div>
+
+      <div class="row">
+
+        <input
+          id="chatText"
+          placeholder="พิมพ์ข้อความ..."
+          style="flex:1;min-width:140px"
+        >
+
+        <button id="sendChat">
+          ส่ง
+        </button>
+
+      </div>
+    </div>
+
+    <!-- เครดิตจำลอง -->
+    <div class="panel">
+      <h3>💰 บัญชีเครดิตจำลอง</h3>
+
+      <p>
+        เครดิตใช้สำหรับเล่นเกมเท่านั้น
+        ไม่สามารถแลกหรือถอนเป็นเงินจริงได้
+      </p>
+
+      <div id="owner"></div>
+
+      <h4>ประวัติรับ–จ่ายเครดิต</h4>
+
+      <div id="ledger"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<body>
+
+<header>
+  <h1>🃏 KANG ONLINE</h1>
+  <small>
+    V11.0 · Online Multiplayer · Virtual Credits
+  </small>
+</header>
+
+<main>
+
+  <div id="status">
+    กำลังเชื่อมต่อเซิร์ฟเวอร์...
+  </div>
+
+  <!-- สร้างห้องและเข้าร่วมห้อง -->
+  <section id="lobby" class="panel">
+    <h3>สร้างห้อง / เข้าร่วมห้อง</h3>
+
+    <input
+      id="name"
+      maxlength="24"
+      placeholder="ชื่อผู้เล่น"
+    >
+
+    <input
+      id="code"
+      maxlength="6"
+      placeholder="รหัสห้อง 6 ตัว"
+    >
+
+    <div class="row">
+      <button id="create">
+        สร้างห้อง
+      </button>
+
+      <button id="join" class="alt">
+        เข้าร่วมห้อง
+      </button>
+    </div>
+
+    <p id="roomInfo"></p>
+  </section>
+
+  <!-- หน้าจอเกม -->
+  <section id="game" class="hidden">
+
+    <div class="panel">
+      <h3 id="roomTitle">
+        ห้องเกม
+      </h3>
+
+      <div id="roundInfo">
+        รอผู้เล่นเข้าร่วม
+      </div>
+
+      <p id="result" class="notice"></p>
+
+      <button id="start" class="hidden">
+        เริ่มเกม (ครบ 5 คน)
+      </button>
+
+      <button id="next" class="hidden">
+        เริ่มรอบถัดไป
+      </button>
+    </div>
+
+    <!-- โต๊ะไพ่ 5 คน -->
+    <div class="table">
+
+      <div id="seats" class="seats"></div>
+
+      <div class="center">
+        <div id="deckInfo">
+          ไพ่กองจั่ว
+        </div>
+
+        <div id="lastCard">
+          ยังไม่มีไพ่ทิ้ง
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ไพ่ของผู้เล่น -->
+    <div class="panel">
+      <h3>🃏 ไพ่ในมือของฉัน</h3>
+
+      <div id="hand" class="cards"></div>
+
+      <p id="myPoints"></p>
+
+      <div class="row">
+
+        <button id="kang" class="danger">
+          แคง
+        </button>
+
+        <button id="draw">
+          จั่วไพ่
+        </button>
+
+        <button id="discard" class="alt">
+          ทิ้งไพ่ที่เลือก
+        </button>
+
+        <button id="follow" class="alt">
+          ตามไพ่
+        </button>
+
+      </div>
+
+      <p>
+        <small>
+          แตะเลือกไพ่ 1–3 ใบที่มีหน้าเดียวกัน
+        </small>
+      </p>
+    </div>
+
+    <!-- เปิดไพ่เมื่อจบรอบ -->
+    <div class="panel">
+      <h3>🏆 ผลการแข่งขัน</h3>
+
+      <div id="showdown">
+        เมื่อจบรอบ ระบบจะเปิดไพ่ของผู้เล่นทุกคน
+      </div>
+    </div>
+
+    <!-- แชท -->
+    <div class="panel">
+      <h3>💬 แชทผู้เล่น</h3>
+
+      <div id="messages"></div>
+
+      <div class="row">
+
+        <input
+          id="chatText"
+          placeholder="พิมพ์ข้อความ..."
+          style="flex:1;min-width:140px"
+        >
+
+        <button id="sendChat">
+          ส่ง
+        </button>
+
+      </div>
+    </div>
+
+    <!-- เครดิตจำลอง -->
+    <div class="panel">
+      <h3>💰 บัญชีเครดิตจำลอง</h3>
+
+      <p>
+        เครดิตใช้สำหรับเล่นเกมเท่านั้น
+        ไม่สามารถแลกหรือถอนเป็นเงินจริงได้
+      </p>
+
+      <div id="owner"></div>
+
+      <h4>ประวัติรับ–จ่ายเครดิต</h4>
+
+      <div id="ledger"></div>
+    </div>
+
+  </section>
+
+</main>
+
+/* เลือกและยกเลิกการเลือกไพ่ */
+$('hand').addEventListener('click', event => {
+  const element = event.target.closest('[data-card]');
+  if (!element || !state) return;
+
+  const card = Number(element.dataset.card);
+
+  if (selected.includes(card)) {
+    selected = selected.filter(c => c !== card);
+  } else {
+    selected.push(card);
+  }
+
+  renderHand();
+});
+
+/* ตรวจสอบไพ่ที่เลือก */
+function validSelection() {
+  if (selected.length < 1 || selected.length > 3) {
+    alert('กรุณาเลือกไพ่ 1–3 ใบ');
+    return false;
+  }
+
+  const sameRank = selected.every(
+    card => card % 13 === selected[0] % 13
+  );
+
+  if (!sameRank) {
+    alert('ไพ่ที่เลือกต้องมีหน้าเดียวกัน');
+    return false;
+  }
+
+  return true;
+}
+
+/* สร้างห้องใหม่ */
+$('create').onclick = () => {
+  const name = $('name').value.trim();
+
+  if (!name) {
+    alert('กรุณาใส่ชื่อผู้เล่น');
+    return;
+  }
+
+  session = null;
+  localStorage.removeItem('kangSession');
+
+  send('create', { name });
+};
+
+/* เข้าร่วมห้อง */
+$('join').onclick = () => {
+  const name = $('name').value.trim();
+  const code = $('code').value.trim().toUpperCase();
+
+  if (!name) {
+    alert('กรุณาใส่ชื่อผู้เล่น');
+    return;
+  }
+
+  if (code.length !== 6) {
+    alert('กรุณาใส่รหัสห้อง 6 ตัว');
+    return;
+  }
+
+  send('join', { code, name });
+};
+
+/* เริ่มเกม */
+$('start').onclick = () => {
+  send('start');
+};
+
+/* เริ่มรอบถัดไป */
+$('next').onclick = () => {
+  send('next');
+};
+
+/* แคง */
+$('kang').onclick = () => {
+  if (!state || state.phase !== 'play') return;
+
+  if (confirm('ต้องการแคงไพ่ตอนนี้ใช่ไหม?')) {
+    send('kang');
+  }
+};
+
+/* จั่วไพ่ */
+$('draw').onclick = () => {
+  send('draw');
+};
+
+/* ทิ้งไพ่ */
+$('discard').onclick = () => {
+  if (!validSelection()) return;
+
+  send('discard', {
+    cards: [...selected]
+  });
+};
+
+/* ตามไพ่ */
+$('follow').onclick = () => {
+  if (!validSelection()) return;
+
+  if (!state?.last) {
+    alert('ยังไม่มีไพ่ให้ตาม');
+    return;
+  }
+
+  const lastRank = state.last.cards[0] % 13;
+  const selectedRank = selected[0] % 13;
+
+  if (selectedRank !== lastRank) {
+    alert('ไพ่ตามต้องมีหน้าเดียวกับไพ่ทิ้งล่าสุด');
+    return;
+  }
+
+  send('follow', {
+    cards: [...selected]
+  });
+};
+
+/* ส่งข้อความแชท */
+function sendChatMessage() {
+  const input = $('chatText');
+  const message = input.value.trim();
+
+  if (!message) return;
+
+  send('chat', { message });
+  input.value = '';
+}
+
+$('sendChat').onclick = sendChatMessage;
+
+$('chatText').addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    sendChatMessage();
+  }
+});
+
+/* เริ่มเชื่อมต่อเมื่อเปิดหน้าเว็บไซต์ */
+connect();
+
+</script>
+</body>
+</html>
