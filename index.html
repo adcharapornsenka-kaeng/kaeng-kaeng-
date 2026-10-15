@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KANG ONLINE V11 - Casino Table</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --gold:#e8c47b;
+  --felt:#087052;
+  --dark:#092720;
+}
+body{
+  margin:0;
+  color:#fff;
+  background:radial-gradient(ellipse at center,#18483f,#071a1b 85%);
+  font-family:Arial,sans-serif;
+}
+header{
+  padding:16px 12px;
+  text-align:center;
+  background:#061b19;
+}
+h1{color:var(--gold);margin:0;font-size:26px}
+small{color:#c5d6d0}
+main{max-width:650px;margin:auto;padding:12px}
+.panel{
+  background:#173e35;
+  border:1px solid #467265;
+  border-radius:14px;
+  padding:13px;
+  margin:12px 0;
+}
+.hidden{display:none!important}
+input{
+  min-width:0;
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:9px;
+  font-size:16px;
+}
+button{
+  border:0;
+  border-radius:10px;
+  padding:12px;
+  font-size:14px;
+  font-weight:bold;
+  background:var(--gold);
+  color:#173027;
+  cursor:pointer;
+}
+button:disabled{opacity:.35}
+.row{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}
+.row input{flex:1}
+#status{text-align:center;color:var(--gold);padding:10px}
+#roomTitle{margin:4px 0}
+.note{color:var(--gold)}
+#queueList{font-size:13px;color:#f4d79a}
+
+/* CASINO TABLE */
+.casino-area{
+  position:relative;
+  padding:65px 5px 95px;
+  overflow:hidden;
+}
+.casino-table{
+  position:relative;
+  width:88%;
+  height:570px;
+  margin:auto;
+  border-radius:48% / 35%;
+  border:13px solid #69452b;
+  outline:3px solid #c8a16c;
+  background:
+    radial-gradient(ellipse at 50% 48%,
+      #159979 0%,
+      #087054 55%,
+      #03412f 100%);
+  box-shadow:
+    inset 0 0 0 4px #d2a766,
+    inset 0 0 45px #003b2d,
+    0 15px 35px #0009;
+}
+.table-center{
+  position:absolute;
+  top:42%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:65%;
+  text-align:center;
+  color:#e9d5a5;
+}
+.table-brand{
+  font-size:17px;
+  font-weight:bold;
+  letter-spacing:2px;
+  opacity:.65;
+}
+.table-deck{
+  margin:16px auto;
+  width:48px;
+  height:65px;
+  border:3px solid white;
+  border-radius:7px;
+  background:repeating-linear-gradient(
+    45deg,#204c9a,#204c9a 5px,
+    #4274c5 5px,#4274c5 10px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+}
+#lastCard{font-size:12px}
+.seat{
+  position:absolute;
+  z-index:2;
+  width:118px;
+  padding:6px 4px;
+  border-radius:12px;
+  background:#0b3029e8;
+  border:2px solid #568071;
+  text-align:center;
+  font-size:12px;
+}
+.seat.me{border-color:var(--gold)}
+.seat.turn{
+  box-shadow:0 0 0 3px #75ffc1,0 0 20px #5cff9c;
+}
+.seat-name{
+  font-weight:bold;
+  font-size:13px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.avatar{
+  width:39px;
+  height:39px;
+  margin:0 auto 4px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#d5b16c,#80522e);
+  border:2px solid #f1d595;
+  border-radius:50%;
+  font-size:22px;
+}
+.seat-score{color:#f1d595;font-size:12px;margin:4px 0}
+.seat-cards{
+  display:flex;
+  justify-content:center;
+  margin-top:4px;
+}
+.mini-back{
+  width:15px;
+  height:25px;
+  margin-left:-3px;
+  background:#2458a5;
+  border:1px solid #b9d7ff;
+  border-radius:3px;
+}
+.mini-card{
+  display:inline-grid;
+  place-items:center;
+  width:22px;
+  height:30px;
+  margin-left:-3px;
+  background:white;
+  color:#111;
+  border-radius:3px;
+  font-weight:bold;
+  font-size:9px;
+}
+.red{color:#c72232!important}
+.seat-0{top:-49px;left:50%;transform:translateX(-50%)}
+.seat-1{top:115px;right:-45px}
+.seat-2{bottom:110px;right:-45px}
+.seat-3{bottom:110px;left:-45px}
+.seat-4{top:115px;left:-45px}
+
+.my-area{
+  margin-top:-20px;
+  position:relative;
+  z-index:3;
+  text-align:center;
+}
+.my-area h3{color:var(--gold)}
+#hand{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:0;
+  min-height:95px;
+  padding:10px 0;
+}
+.play-card{
+  display:grid;
+  place-items:center;
+  width:57px;
+  height:85px;
+  background:#fff;
+  color:#151515;
+  border:2px solid #ddd;
+  border-radius:7px;
+  font-size:21px;
+  font-weight:bold;
+  margin-left:-5px;
+  cursor:pointer;
+  box-shadow:0 4px 8px #0005;
+}
+.play-card.selected{
+  transform:translateY(-15px);
+  border:3px solid #ffcc39;
+}
+.actions{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+}
+.actions button{padding:13px 3px}
+#messages{
+  max-height:160px;
+  overflow:auto;
+  background:#082c25;
+  border-radius:8px;
+  padding:8px;
+  font-size:13px;
+}
+#messages div{padding:4px}
+#ledger{
+  max-height:130px;
+  overflow:auto;
+  font-size:13px;
+}
+#ledger div{padding:5px;border-bottom:1px solid #456}
+#showdown{font-size:13px}
+@media(max-width:420px){
+  .casino-table{width:82%;height:500px}
+  .seat{width:100px}
+  .seat-1,.seat-2{right:-45px}
+  .seat-3,.seat-4{left:-45px}
+  .play-card{width:51px;height:76px;font-size:19px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🃏 KANG ONLINE</h1>
+<small>V11.0 · CASINO EDITION · คะแนนจำลอง</small>
+</header>
+
+<main>
+<div id="status">กำลังเชื่อมต่อเซิร์ฟเวอร์...</div>
+
+<section id="lobby" class="panel">
+<h3>🚪 เข้าห้องเกม</h3>
+<input id="name" placeholder="ชื่อของคุณ" maxlength="24">
+<div class="row">
+<button id="create">สร้างห้องใหม่</button>
+</div>
+<div class="row">
+<input id="code" placeholder="รหัสห้อง 6 ตัว" maxlength="6">
+<button id="join">เข้าห้อง</button>
+</div>
+</section>
+
+<section id="game" class="hidden">
+
+<div class="panel">
+<h3 id="roomTitle"></h3>
+<p id="roundInfo"></p>
+<p id="queueList"></p>
+<p id="result" class="note"></p>
+<div class="row">
+<button id="copyCode">📋 คัดลอกรหัสห้อง</button>
+<button id="start" class="hidden">▶ เริ่มเกม</button>
+<button id="next" class="hidden">🔄 รอบใหม่</button>
+</div>
+</div>
+
+<div class="casino-area">
+<div class="casino-table">
+<div id="seats"></div>
+<div class="table-center">
+<div class="table-brand">KANG ONLINE</div>
+<div class="table-deck">🂠</div>
+<div id="deckInfo">ไพ่กองจั่ว 0 ใบ</div>
+<div id="lastCard">ยังไม่มีไพ่ทิ้ง</div>
+</div>
+</div>
+</div>
+
+<div class="my-area panel">
+<h3>🃏 ไพ่ของฉัน</h3>
+<div id="hand"></div>
+<p id="myPoints"></p>
+<div class="actions">
+<button id="kang">แคง</button>
+<button id="draw">จั่ว</button>
+<button id="discard">ทิ้งไพ่</button>
+<button id="follow">ตามไพ่</button>
+</div>
+<p><small>แตะไพ่เพื่อเลือก · เลือกได้ 1–3 ใบหน้าเดียวกัน</small></p>
+</div>
+
+<div class="panel">
+<h3>🏆 ผลรอบ</h3>
+<div id="showdown">รอผลการแข่งขัน</div>
+</div>
+
+<div class="panel">
+<h3>💬 แชท</h3>
+<div id="messages"></div>
+<div class="row">
+<input id="chatText" placeholder="ข้อความ...">
+<button id="sendChat">ส่ง</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>⭐ คะแนนจำลอง</h3>
+<small>ไม่มีมูลค่าเงินจริง ไม่สามารถแลกหรือถอนเงินได้</small>
+<div id="ledger"></div>
+</div>
+
+</section>
+</main>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+let ws=null,state=null,selected=[],session=null,retry=null;
+
+try{
+  session=JSON.parse(localStorage.getItem("kangSession")||"null");
+}catch{
+  session=null;
+}
+
+const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+const suits=["♠","♥","♦","♣"];
+
+function esc(x){
+  return String(x??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function label(c){
+  return ranks[c%13]+suits[Math.floor(c/13)];
+}
+
+function isRed(c){
+  return [1,2].includes(Math.floor(c/13));
+}
+
+function card(c,large=false){
+  const chosen=selected.includes(c);
+  return '<span class="'+(large?"play-card":"mini-card")+
+    (isRed(c)?" red":"")+
+    (large&&chosen?" selected":"")+
+    '" data-card="'+c+'">'+label(c)+'</span>';
+}
+
+function backs(n){
+  return Array.from({length:n||0},
+    ()=>'<span class="mini-back"></span>').join("");
+}
+
+function points(hand){
+  return (hand||[]).reduce(
+    (sum,c)=>sum+Math.min(c%13+1,10),0
+  );
+}
+
+function send(action,extra={}){
+  if(!ws||ws.readyState!==WebSocket.OPEN){
+    $("status").textContent="ยังไม่ได้เชื่อมต่อเซิร์ฟเวอร์";
+    return;
+  }
+  ws.send(JSON.stringify({action,...extra}));
+}
+
+function connect(){
+  const protocol=location.protocol==="https:"?"wss:":"ws:";
+  ws=new WebSocket(protocol+"//"+location.host);
+
+  ws.onopen=()=>{
+    $("status").textContent="🟢 เชื่อมต่อแล้ว";
+    if(session?.code&&session?.token){
+      send("join",{code:session.code,token:session.token});
+    }
+  };
+
+  ws.onclose=()=>{
+    $("status").textContent="กำลังเชื่อมต่อใหม่...";
+    clearTimeout(retry);
+    retry=setTimeout(connect,2500);
+  };
+
+  ws.onerror=()=>{
+    $("status").textContent="⚠️ เชื่อมต่อไม่สำเร็จ";
+  };
+
+  ws.onmessage=event=>{
+    let data;
+    try{data=JSON.parse(event.data)}catch{return}
+
+    if(data.type==="error"){
+      $("status").textContent="⚠️ "+data.message;
+      if(data.message==="ไม่พบห้อง"){
+        session=null;
+        state=null;
+        localStorage.removeItem("kangSession");
+        $("lobby").classList.remove("hidden");
+        $("game").classList.add("hidden");
+      }
+      return;
+    }
+
+    if(data.type==="joined"){
+      session={code:data.code,token:data.token};
+      localStorage.setItem("kangSession",JSON.stringify(session));
+      $("code").value=data.code;
+    }
+
+    if(data.type==="state"){
+      state=data.state;
+      selected=[];
+      render();
+    }
+  };
+}
+
+function renderHand(){
+  $("hand").innerHTML=(state?.hand||[])
+    .map(c=>card(c,true)).join("");
+}
+
+function render(){
+  const s=state;
+  if(!s)return;
+
+  $("lobby").classList.add("hidden");
+  $("game").classList.remove("hidden");
+
+  const spectator=s.seat<0;
+  const myTurn=!spectator&&s.phase==="play"&&s.turn===s.seat;
+
+  $("roomTitle").textContent="ห้อง "+s.code;
+  $("roundInfo").textContent="รอบ "+s.round+" · "+
+    (s.phase==="lobby"?"รอเริ่มเกม":
+     s.phase==="play"?"กำลังเล่น":"จบรอบ");
+
+  $("queueList").textContent=spectator
+    ?"⏳ รอคิวลำดับ "+s.queuePosition
+    :s.queue?.length
+      ?"⏳ รอคิว: "+s.queue.join(", ")
+      :"ไม่มีผู้เล่นรอคิว";
+
+  $("result").textContent=s.result?.message||"";
+  $("start").classList.toggle("hidden",s.phase!=="lobby");
+  $("next").classList.toggle("hidden",s.phase!=="end");
+
+  $("deckInfo").textContent="ไพ่กองจั่ว "+s.deckCount+" ใบ";
+  $("lastCard").innerHTML=s.last
+    ?"ไพ่ทิ้งล่าสุด: "+(s.last.cards||[])
+      .map(c=>card(c)).join("")
+    :"ยังไม่มีไพ่ทิ้ง";
+
+  // Rotate the seating so the current player is at the bottom
+  // while preserving the original server seat index.
+  const order=s.seat>=0
+    ?[0,1,2,3,4].map(i=>(s.seat+i)%5)
+    :[0,1,2,3,4];
+
+  $("seats").innerHTML=order.map((seatIndex,position)=>{
+    const p=s.players[seatIndex];
+    if(!p)return "";
+
+    const show=s.phase==="end"&&Array.isArray(s.showdown);
+    const cards=show
+      ?(s.showdown[seatIndex]||[]).map(c=>card(c)).join("")
+      :backs(p.cardCount);
+
+    return '<div class="seat seat-'+position+
+      (seatIndex===s.seat?" me":"")+
+      (s.phase==="play"&&seatIndex===s.turn?" turn":"")+
+      '"><div class="avatar">'+(p.bot?"🤖":"👤")+
+      '</div><div class="seat-name">'+esc(p.name)+
+      (seatIndex===s.seat?" (ฉัน)":"")+
+      '</div><div>'+(!p.bot&&!p.online?"⚪":"🟢")+
+      '</div><div class="seat-score">'+p.credits+
+      ' คะแนน</div><div class="seat-cards">'+cards+
+      '</div><small>ทิ้ง '+(p.discards||[]).length+
+      ' ใบ</small></div>';
+  }).join("");
+
+  renderHand();
+
+  $("myPoints").textContent=spectator
+    ?"⏳ คุณอยู่ในคิวรอ"
+    :"แต้มไพ่ "+points(s.hand)+
+      " · คะแนนสะสม "+(s.players[s.seat]?.credits??0);
+
+  $("kang").disabled=!myTurn||s.drawn;
+  $("draw").disabled=!myTurn||s.drawn||s.deckCount===0;
+  $("discard").disabled=!myTurn||!s.drawn;
+  $("follow").disabled=!myTurn||s.drawn||!s.last||
+    s.last.player!==(s.seat+4)%5;
+
+  $("messages").innerHTML=(s.log||[])
+    .map(m=>"<div>"+esc(m)+"</div>").join("");
+  $("messages").scrollTop=$("messages").scrollHeight;
+
+  $("ledger").innerHTML=(s.ledger||[])
+    .map(x=>"<div>รอบ "+esc(x.round)+" · "+
+      esc(x.from)+" → "+esc(x.to)+" · "+
+      esc(x.amount)+" คะแนน</div>").join("");
+
+  $("showdown").textContent=s.phase==="end"
+    ?"เปิดไพ่ของผู้เล่นทุกคนบนโต๊ะแล้ว"
+    :"รอจบรอบ";
+
+  $("status").textContent=spectator
+    ?"⏳ อยู่ในคิวรอ"
+    :myTurn?"🟢 ถึงตาคุณแล้ว":"🟢 เชื่อมต่อแล้ว";
+}
+
+function validCards(){
+  if(selected.length<1||selected.length>3){
+    alert("เลือกไพ่ 1–3 ใบ");
+    return false;
+  }
+  if(!selected.every(c=>c%13===selected[0]%13)){
+    alert("ต้องเลือกไพ่หน้าเดียวกัน");
+    return false;
+  }
+  return true;
+}
+
+$("create").onclick=()=>{
+  const name=$("name").value.trim();
+  if(!name)return alert("กรุณาใส่ชื่อ");
+  send("create",{name});
+};
+
+$("join").onclick=()=>{
+  const name=$("name").value.trim();
+  const code=$("code").value.trim().toUpperCase();
+  if(!name||code.length!==6){
+    return alert("กรุณาใส่ชื่อและรหัสห้อง 6 ตัว");
+  }
+  send("join",{name,code});
+};
+
+$("start").onclick=()=>send("start");
+$("next").onclick=()=>send("next");
+$("kang").onclick=()=>send("kang");
+$("draw").onclick=()=>send("draw");
+
+$("discard").onclick=()=>{
+  if(validCards())send("discard",{cards:[...selected]});
+};
+
+$("follow").onclick=()=>{
+  if(!validCards())return;
+  if(!state?.last?.cards?.length||
+     selected[0]%13!==state.last.cards[0]%13){
+    return alert("ไพ่ที่เลือกไม่ตรงกับไพ่ล่าสุด");
+  }
+  send("follow",{cards:[...selected]});
+};
+
+$("hand").addEventListener("click",event=>{
+  const el=event.target.closest("[data-card]");
+  if(!el)return;
+  const c=Number(el.dataset.card);
+  selected=selected.includes(c)
+    ?selected.filter(x=>x!==c)
+    :[...selected,c];
+  renderHand();
+});
+
+$("copyCode").onclick=async()=>{
+  if(!state)return;
+  try{
+    await navigator.clipboard.writeText(state.code);
+    alert("คัดลอกรหัสห้อง "+state.code+" แล้ว");
+  }catch{
+    prompt("รหัสห้อง",state.code);
+  }
+};
+
+function sendChat(){
+  const input=$("chatText");
+  const message=input.value.trim();
+  if(!message)return;
+  send("chat",{message});
+  input.value="";
+}
+
+$("sendChat").onclick=sendChat;
+$("chatText").addEventListener("keydown",event=>{
+  if(event.key==="Enter")sendChat();
+});
+
+connect();
+</script>
+</body>
+</html>
