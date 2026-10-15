@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KANG ONLINE V11.0</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#082b25;color:#fff;font-family:Arial,sans-serif}
+header{background:#061d19;text-align:center;padding:18px}
+h1{margin:0;color:#edcb80}
+small{color:#b8d1c8}
+main{max-width:850px;margin:auto;padding:12px}
+.panel{background:#16483d;border:1px solid #39715f;border-radius:14px;padding:14px;margin:12px 0}
+input{width:100%;padding:12px;margin:5px 0;border:0;border-radius:8px;font-size:16px}
+button{background:#e8c77d;color:#18241d;border:0;border-radius:9px;padding:11px;margin:4px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.4;cursor:default}
+.alt{background:#d3e5df}
+.danger{background:#f1a2a2}
+.row{display:flex;flex-wrap:wrap;gap:5px}
+.hidden{display:none!important}
+#status{text-align:center;color:#f7d68d;padding:10px}
+.table{background:#0c5742;border:4px solid #b99653;border-radius:30px;padding:12px;margin:14px 0}
+.seats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.seat{background:#123b32;border-radius:12px;padding:9px;min-height:110px;overflow-wrap:anywhere}
+.seat.me{border:2px solid #f4d58a}
+.seat.turn{box-shadow:0 0 0 2px #7ae8a6}
+.seat b{display:block}
+.cards{display:flex;gap:3px;flex-wrap:wrap;margin-top:6px}
+.card{display:inline-flex;align-items:center;justify-content:center;background:white;color:#111;border:2px solid #ddd;border-radius:6px;width:39px;height:56px;font-size:17px;font-weight:bold}
+.card.red{color:#c32d36}
+.card.back{background:#285caa;color:white;border-color:#a6c8ff}
+.card.selected{transform:translateY(-7px);border:3px solid #f1bf36}
+.card.pick{cursor:pointer}
+.pile{border-top:1px solid #50816c;margin-top:9px;padding-top:7px}
+.pile .card{width:27px;height:39px;font-size:12px}
+.center{text-align:center;padding:15px}
+#hand .card{width:49px;height:72px;font-size:21px}
+#messages{max-height:180px;overflow:auto;background:#082d26;padding:10px;border-radius:8px}
+#messages div{margin:5px 0}
+#ledger{max-height:180px;overflow:auto;font-size:13px}
+#ledger div{border-bottom:1px solid #397360;padding:6px}
+.notice{color:#f8d987}
+#hand{padding-top:8px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🃏 KANG ONLINE</h1>
+<small>V11.0 · 1–5 Players · Auto Bots · คะแนนจำลอง</small>
+</header>
+
+<main>
+<div id="status">กำลังเชื่อมต่อเซิร์ฟเวอร์...</div>
+
+<section id="lobby" class="panel">
+<h3>สร้างห้อง / เข้าร่วมห้อง</h3>
+<input id="name" maxlength="24" placeholder="ชื่อผู้เล่น">
+<input id="code" maxlength="6" placeholder="รหัสห้อง 6 ตัว">
+<div class="row">
+<button id="create">สร้างห้อง</button>
+<button id="join" class="alt">เข้าร่วมห้อง</button>
+</div>
+<p id="roomInfo"></p>
+<p><small>เจ้าของห้องเริ่มเกมคนเดียวได้ ระบบจะเติม Bot ให้ครบ 5 คนโดยอัตโนมัติ</small></p>
+</section>
+
+<section id="game" class="hidden">
+<div class="panel">
+<h3 id="roomTitle">ห้องเกม</h3>
+<div id="roundInfo"></div>
+<p id="result" class="notice"></p>
+<button id="start" class="hidden">🤖 เริ่มเกม (เติม Bot อัตโนมัติ)</button>
+<button id="next" class="hidden">🔄 เริ่มรอบถัดไป</button>
+</div>
+
+<div class="table">
+<div id="seats" class="seats"></div>
+<div class="center">
+<div id="deckInfo"></div>
+<div id="lastCard"></div>
+</div>
+</div>
+
+<div class="panel">
+<h3>🃏 ไพ่ในมือของฉัน</h3>
+<div id="hand" class="cards"></div>
+<p id="myPoints"></p>
+<div class="row">
+<button id="kang" class="danger">แคง</button>
+<button id="draw">จั่วไพ่</button>
+<button id="discard" class="alt">ทิ้งไพ่ที่เลือก</button>
+<button id="follow" class="alt">ตามไพ่</button>
+</div>
+<p><small>แตะเลือกไพ่ 1–3 ใบหน้าเดียวกัน</small></p>
+</div>
+
+<div class="panel">
+<h3>🏆 ผลการแข่งขัน</h3>
+<div id="showdown">รอจบรอบ</div>
+</div>
+
+<div class="panel">
+<h3>💬
