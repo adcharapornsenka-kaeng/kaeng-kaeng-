@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+
+content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>KANG ONLINE V12.1 — CASINO EDITION</title>
+
+<style>
+
+:root {
+
+  color-scheme: dark;
+
+  font-family: -apple-system, BlinkMacSystemFont,
+
+    "Segoe UI", sans-serif;
+
+}
+
+* {
+
+  box-sizing: border-box;
+
+}
+
+body {
+
+  margin: 0;
+
+  padding: 12px 10px 45px;
+
+  min-height: 100vh;
+
+  color: white;
+
+  background:
+
+    radial-gradient(circle at top, #27583b, #06140d 70%);
+
+}
+
+h1 {
+
+  margin: 10px 0 3px;
+
+  text-align: center;
+
+  color: #f7d68b;
+
+  font-size: clamp(22px, 5vw, 32px);
+
+}
+
+h2 {
+
+  font-size: 16px;
+
+  color: #f7d68b;
+
+  margin: 8px 0 12px;
+
+}
+
+.subtitle {
+
+  text-align: center;
+
+  color: #d9c48e;
+
+  font-size: 12px;
+
+  margin-bottom: 15px;
+
+}
+
+.panel {
+
+  max-width: 900px;
+
+  margin: 12px auto;
+
+  padding: 14px;
+
+  background: #10281edb;
+
+  border: 1px solid #987c45;
+
+  border-radius: 16px;
+
+}
+
+.hidden {
+
+  display: none !important;
+
+}
+
+.flex {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 8px;
+
+}
+
+.flex > * {
+
+  flex: 1;
+
+}
+
+button {
+
+  color: white;
+
+  border: 1px solid #bb9b54;
+
+  background: linear-gradient(#70562e, #33230f);
+
+  border-radius: 10px;
+
+  padding: 11px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+}
+
+button:disabled {
+
+  opacity: .35;
+
+  cursor: not-allowed;
+
+}
+
+button.danger {
+
+  background: linear-gradient(#a7333c, #67151d);
+
+  border-color: #fa777d;
+
+}
+
+button.green {
+
+  background: linear-gradient(#277c52, #125132);
+
+}
+
+input {
+
+  width: 100%;
+
+  min-width: 0;
+
+  border: 1px solid #74967c;
+
+  border-radius: 10px;
+
+  padding: 12px;
+
+  background: #102b20;
+
+  color: white;
+
+  font-size: 15px;
+
+}
+
+.muted {
+
+  color: #c0cbbb;
+
+  font-size: 12px;
+
+}
+
+.room-header {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+}
+
+.room-header button {
+
+  font-size: 12px;
+
+  padding: 9px;
+
+}
+
+.notice {
+
+  padding: 10px;
+
+  margin-top: 10px;
+
+  border-radius: 9px;
+
+  background: #274331;
+
+  font-size: 13px;
+
+}
+
+.turn-alert {
+
+  text-align: center;
+
+  background: #b51221;
+
+  border: 1px solid #ff6673;
+
+  border-radius: 10px;
+
+  padding: 11px;
+
+  font-size: 17px;
+
+  font-weight: 900;
+
+  margin-top: 10px;
+
+  box-shadow: 0 0 16px #f00a;
+
+}
+
+.table {
+
+  position: relative;
+
+  width: 100%;
+
+  max-width: 850px;
+
+  height: clamp(390px, 80vw, 565px);
+
+  margin: 20px auto;
+
+  border: 12px solid #79562b;
+
+  border-radius: 48% / 43%;
+
+  background:
+
+    radial-gradient(ellipse, #18704a, #08462e 72%, #05351f);
+
+  box-shadow:
+
+    0 0 0 4px #d2ae65,
+
+    inset 0 0 0 4px #0d3523,
+
+    0 12px 35px #0009;
+
+  overflow: hidden;
+
+}
+
+.seat {
+
+  position: absolute;
+
+  transform: translate(-50%, -50%);
+
+  width: clamp(104px, 26vw, 178px);
+
+  min-height: 80px;
+
+  padding: 6px;
+
+  text-align: center;
+
+  border: 2px solid #b69a56;
+
+  border-radius: 12px;
+
+  background: #082b21ed;
+
+  font-size: 11px;
+
+  box-shadow: 0 4px 10px #0009;
+
+}
+
+.seat.current {
+
+  border-color: #ffdc69;
+
+  box-shadow: 0 0 18px 5px #ffce39;
+
+}
+
+.seat.me {
+
+  border-color: #73ffc0;
+
+}
+
+.seat.me.current {
+
+  border-color: #ff4444;
+
+  box-shadow: 0 0 20px 7px #ff2727;
+
+}
+
+.seat[data-pos="0"] {
+
+  left: 50%;
+
+  top: 84%;
+
+}
+
+.seat[data-pos="1"] {
+
+  left: 15%;
+
+  top: 62%;
+
+}
+
+.seat[data-pos="2"] {
+
+  left: 27%;
+
+  top: 18%;
+
+}
+
+.seat[data-pos="3"] {
+
+  left: 73%;
+
+  top: 18%;
+
+}
+
+.seat[data-pos="4"] {
+
+  left: 85%;
+
+  top: 62%;
+
+}
+
+.player-name {
+
+  font-weight: 900;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+}
+
+.credit {
+
+  color: #ffdd8c;
+
+  margin: 3px 0;
+
+}
+
+.pile {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 2px;
+
+  justify-content: center;
+
+  max-height: 66px;
+
+  overflow-y: auto;
+
+  margin-top: 3px;
+
+}
+
+.center {
+
+  position: absolute;
+
+  left: 50%;
+
+  top: 48%;
+
+  transform: translate(-50%, -50%);
+
+  text-align: center;
+
+  color: #ffdc8c;
+
+  font-size: 12px;
+
+}
+
+.center strong {
+
+  font-size: 20px;
+
+}
+
+.card {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 40px;
+
+  height: 58px;
+
+  padding: 4px;
+
+  background: #fff;
+
+  color: #161616;
+
+  border: 2px solid #ddd;
+
+  border-radius: 6px;
+
+  font-size: 18px;
+
+  font-weight: 900;
+
+  user-select: none;
+
+  box-shadow: 0 3px 6px #0006;
+
+}
+
+.card.red {
+
+  color: #d32235;
+
+}
+
+.card.tiny {
+
+  min-width: 23px;
+
+  height: 32px;
+
+  padding: 1px;
+
+  font-size: 11px;
+
+  border-width: 1px;
+
+  border-radius: 3px;
+
+}
+
+.card.selectable {
+
+  cursor: pointer;
+
+}
+
+.card.selected {
+
+  transform: translateY(-10px);
+
+  border-color: #ffd343;
+
+  box-shadow: 0 0 13px #ffd343;
+
+}
+
+.hand {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  min-height: 90px;
+
+  padding: 18px 2px 8px;
+
+}
+
+.actions {
+
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 8px;
+
+  margin-top: 10px;
+
+}
+
+.actions button {
+
+  min-height: 48px;
+
+}
+
+.follow-cards {
+
+  display: flex;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  padding: 15px 0;
+
+}
+
+.scroll {
+
+  max-height: 180px;
+
+  overflow-y: auto;
+
+  font-size: 12px;
+
+  line-height: 1.9;
+
+  overflow-wrap: anywhere;
+
+}
+
+.win {
+
+  text-align: center;
+
+  font-size: 19px;
+
+  font-weight: 900;
+
+  color: #ffde8a;
+
+}
+
+#toast {
+
+  display: none;
+
+  position: fixed;
+
+  z-index: 100;
+
+  bottom: 20px;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  max-width: 90%;
+
+  padding: 12px 18px;
+
+  border-radius: 10px;
+
+  background: #8b2630;
+
+  box-shadow: 0 5px 25px #000a;
+
+  text-align: center;
+
+}
+
+details {
+
+  margin-top: 12px;
+
+}
+
+summary {
+
+  cursor: pointer;
+
+  color: #f5d588;
+
+  font-weight: 700;
+
+}
+
+@media (min-width: 680px) {
+
+  .actions {
+
+    grid-template-columns: repeat(4, 1fr);
+
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>♠ KANG ONLINE V12.1 ♥</h1>
+
+<div class="subtitle">
+
+  CASINO EDITION · 5 PLAYERS · SIMULATED CREDITS
+
+</div>
+
+<section id="setup" class="panel">
+
+  <h2>🎮 สร้างห้อง / เข้าห้อง</h2>
+
+  <div class="flex">
+
+    <input
+
+      id="playerName"
+
+      placeholder="ชื่อผู้เล่น"
+
+      maxlength="32"
+
+    >
+
+    <input
+
+      id="roomInput"
+
+      placeholder="รหัสห้อง"
+
+      maxlength="6"
+
+      autocapitalize="characters"
+
+    >
+
+  </div>
+
+  <div class="flex" style="margin-top:10px">
+
+    <button id="createBtn" class="green">
+
+      ✨ สร้างห้อง
+
+    </button>
+
+    <button id="joinBtn">
+
+      🚪 เข้าห้อง
+
+    </button>
+
+  </div>
+
+  <p class="muted">
+
+    ผู้เล่นจริงสามารถเข้ามาแทน Bot ได้
+
+    หากห้องเต็มจะเข้าคิวรอ
+
+  </p>
+
+</section>
+
+<div id="game" class="hidden">
+
+  <section class="panel">
+
+    <div class="room-header">
+
+      <div>
+
+        ห้อง <strong id="roomLabel">—</strong>
+
+        · รอบ <strong id="roundLabel">0</strong>
+
+      </div>
+
+      <div class="flex" style="flex:0 1 auto">
+
+        <button id="copyRoomBtn">
+
+          📋 คัดลอกรหัส
+
+        </button>
+
+        <button id="leaveBtn" class="danger">
+
+          🚪 ออกจากห้อง
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <div id="turnAlert" class="turn-alert hidden">
+
+      🔴 ถึงตาคุณแล้ว!
+
+    </div>
+
+    <div id="status" class="notice">
+
+      กำลังเชื่อมต่อ...
+
+    </div>
+
+  </section>
+
+  <div class="table">
+
+    <div class="center">
+
+      🂠 กองจั่วกลาง
+
+      <br>
+
+      <strong id="deckCount">27</strong>
+
+      <br>
+
+      ใบ
+
+      <br><br>
+
+      <span id="centerMessage">CASINO EDITION</span>
+
+    </div>
+
+    <div id="seats"></div>
+
+  </div>
+
+  <section class="panel">
+
+    <h2>
+
+      🃏 ไพ่ในมือของคุณ
+
+      <span id="handCount"></span>
+
+    </h2>
+
+    <div id="hand" class="hand"></div>
+
+    <div id="followPanel" class="hidden">
+
+      <p class="muted" style="text-align:center">
+
+        เลือกไพ่จากชุดล่าสุดของผู้เล่นก่อนหน้า
+
+        ได้ 1, 2 หรือ 3 ใบ
+
+      </p>
+
+      <div id="followCards" class="follow-cards"></div>
+
+      <button id="cancelFollowBtn">
+
+        ยกเลิกการเลือกตามไพ่
+
+      </button>
+
+    </div>
+
+    <div class="actions">
+
+      <button id="kangBtn">
+
+        🔥 แคง!
+
+      </button>
+
+      <button id="followBtn">
+
+        🃏 ตามไพ่
+
+      </button>
+
+      <button id="drawBtn">
+
+        🂠 หยิบไพ่
+
+      </button>
+
+      <button id="discardBtn">
+
+        🗑️ ทิ้งไพ่
+
+      </button>
+
+    </div>
+
+    <div class="flex" style="margin-top:12px">
+
+      <button id="startBtn" class="green">
+
+        ▶️ เริ่มเกม
+
+      </button>
+
+      <button id="nextBtn" class="green">
+
+        🔄 รอบถัดไป
+
+      </button>
+
+      <button id="shuffleBtn">
+
+        🎲 จับที่นั่งใหม่
+
+      </button>
+
+    </div>
+
+    <div id="votePanel" class="notice hidden"></div>
+
+    <div id="resultPanel" class="notice hidden"></div>
+
+  </section>
+
+  <section class="panel">
+
+    <h2>💰 เติมเครดิตจำลอง</h2>
+
+    <div id="creditButtons" class="flex"></div>
+
+    <p class="muted">
+
+      🥂 Champagne Money สะสม:
+
+      <strong id="champagne">0</strong> เครดิต
+
+    </p>
+
+    <h2>💬 แชต / เหตุการณ์</h2>
+
+    <div id="gameLog" class="scroll"></div>
+
+    <div class="flex" style="margin-top:10px">
+
+      <input id="chatInput" placeholder="พิมพ์ข้อความ...">
+
+      <button id="sendChatBtn">
+
+        ส่ง
+
+      </button>
+
+    </div>
+
+    <details>
+
+      <summary>📒 ประวัติการโอนเครดิต</summary>
+
+      <div id="ledger" class="scroll"></div>
+
+    </details>
+
+  </section>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+
+const $ = id => document.getElementById(id);
+
+let ws = null;
+
+let state = null;
+
+let identity = null;
+
+let leaving = false;
+
+let followMode = false;
+
+const selectedHand = new Set();
+
+const selectedFollow = new Set();
+
+try {
+
+  identity = JSON.parse(
+
+    localStorage.getItem("kangIdentity") || "null"
+
+  );
+
+} catch {
+
+  identity = null;
+
+}
+
+$("playerName").value =
+
+  localStorage.getItem("kangName") || "";
+
+$("roomInput").value = identity?.code || "";
+
+function escapeHTML(text) {
+
+  return String(text ?? "").replace(
+
+    /[&<>"']/g,
+
+    c => ({
+
+      "&": "&amp;",
+
+      "<": "&lt;",
+
+      ">": "&gt;",
+
+      '"': "&quot;",
+
+      "'": "&#39;"
+
+    })[c]
+
+  );
+
+}
+
+function toast(message) {
+
+  const el = $("toast");
+
+  el.textContent = message;
+
+  el.style.display = "block";
+
+  clearTimeout(toast.timer);
+
+  toast.timer = setTimeout(() => {
+
+    el.style.display = "none";
+
+  }, 3000);
+
+}
+
+function send(action, extra = {}) {
+
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+
+    toast("ยังไม่ได้เชื่อมต่อเซิร์ฟเวอร์");
+
+    return false;
+
+  }
+
+  ws.send(JSON.stringify({ action, ...extra }));
+
+  return true;
+
+}
+
+function connect(action) {
+
+  const name = $("playerName").value.trim() || "Player";
+
+  const code = $("roomInput").value.trim().toUpperCase();
+
+  if (action === "join" && !code) {
+
+    toast("กรุณากรอกรหัสห้อง");
+
+    return;
+
+  }
+
+  localStorage.setItem("kangName", name);
+
+  if (ws) {
+
+    const old = ws;
+
+    ws = null;
+
+    old.close();
+
+  }
+
+  leaving = false;
+
+  const protocol =
+
+    location.protocol === "https:" ? "wss://" : "ws://";
+
+  const socket = new WebSocket(protocol + location.host);
+
+  ws = socket;
+
+  socket.onopen = () => {
+
+    if (ws !== socket) return;
+
+    send(action, {
+
+      name,
+
+      code,
+
+      token:
+
+        action === "join" && identity?.code === code
+
+          ? identity.token
+
+          : undefined
+
+    });
+
+  };
+
+  socket.onmessage = event => {
+
+    if (ws !== socket) return;
+
+    let data;
+
+    try {
+
+      data = JSON.parse(event.data);
+
+    } catch {
+
+      return;
+
+    }
+
+    if (data.type === "left") {
+
+      returnToLobby();
+
+      return;
+
+    }
+
+    if (data.type === "identity") {
+
+      identity = {
+
+        code: data.code,
+
+        token: data.token
+
+      };
+
+      localStorage.setItem(
+
+        "kangIdentity",
+
+        JSON.stringify(identity)
+
+      );
+
+      $("roomInput").value = data.code;
+
+      return;
+
+    }
+
+    if (data.type === "state") {
+
+      state = data;
+
+      selectedHand.clear();
+
+      selectedFollow.clear();
+
+      followMode = false;
+
+      render();
+
+      return;
+
+    }
+
+    if (data.type === "queue") {
+
+      $("setup").classList.add("hidden");
+
+      $("game").classList.remove("hidden");
+
+      $("status").textContent =
+
+        `ห้องเต็ม — คุณอยู่ในคิวลำดับ ${data.position}`;
+
+      $("seats").innerHTML = "";
+
+      $("hand").innerHTML = "";
+
+      document.querySelectorAll(
+
+        ".actions button"
+
+      ).forEach(b => b.disabled = true);
+
+      return;
+
+    }
+
+    if (data.type === "error") {
+
+      toast(data.message);
+
+    }
+
+  };
+
+  socket.onclose = () => {
+
+    if (ws !== socket) return;
+
+    if (!leaving) {
+
+      toast("การเชื่อมต่อขาด กรุณาเข้าห้องใหม่");
+
+    }
+
+  };
+
+}
+
+function returnToLobby() {
+
+  leaving = true;
+
+  localStorage.removeItem("kangIdentity");
+
+  identity = null;
+
+  state = null;
+
+  selectedHand.clear();
+
+  selectedFollow.clear();
+
+  followMode = false;
+
+  $("game").classList.add("hidden");
+
+  $("setup").classList.remove("hidden");
+
+  $("roomInput").value = "";
+
+  if (ws) {
+
+    const old = ws;
+
+    ws = null;
+
+    old.close();
+
+  }
+
+  toast("ออกจากห้องเรียบร้อยแล้ว");
+
+}
+
+$("createBtn").onclick = () => connect("create");
+
+$("joinBtn").onclick = () => connect("join");
+
+$("leaveBtn").onclick = () => {
+
+  if (!confirm(
+
+    "คุณต้องการออกจากห้องใช่หรือไม่?\n\n" +
+
+    "หากกำลังเล่นอยู่ Bot หรือผู้เล่นในคิวจะรับช่วงต่อ"
+
+  )) return;
+
+  leaving = true;
+
+  if (!send("leave")) {
+
+    returnToLobby();
+
+  }
+
+};
+
+$("copyRoomBtn").onclick = async () => {
+
+  const code = state?.code || identity?.code;
+
+  if (!code) return;
+
+  try {
+
+    await navigator.clipboard.writeText(code);
+
+    toast("คัดลอกรหัสห้องแล้ว");
+
+  } catch {
+
+    toast(`รหัสห้อง: ${code}`);
+
+  }
+
+};
+
+const suits = ["♠", "♥", "♦", "♣"];
+
+const ranks = [
+
+  "A", "2", "3", "4", "5", "6",
+
+  "7", "8", "9", "10", "J", "Q", "K"
+
+];
+
+function cardHTML(c, options = {}) {
+
+  const s = Math.floor(c / 13);
+
+  const red = s === 1 || s === 2;
+
+  return `
+
+    <span
+
+      class="card
+
+        ${red ? "red" : ""}
+
+        ${options.tiny ? "tiny" : ""}
+
+        ${options.selected ? "selected" : ""}
+
+        ${options.selectable ? "selectable" : ""}"
+
+      ${options.selectable ? `data-card="${c}"` : ""}
+
+    >
+
+      ${ranks[c % 13]}${suits[s]}
+
+    </span>
+
+  `;
+
+}
+
+function renderHandSelection() {
+
+  $("hand").querySelectorAll("[data-card]").forEach(el => {
+
+    el.classList.toggle(
+
+      "selected",
+
+      selectedHand.has(Number(el.dataset.card))
+
+    );
+
+  });
+
+}
+
+function renderFollowSelection() {
+
+  $("followCards")
+
+    .querySelectorAll("[data-card]")
+
+    .forEach(el => {
+
+      el.classList.toggle(
+
+        "selected",
+
+        selectedFollow.has(Number(el.dataset.card))
+
+      );
+
+    });
+
+}
+
+function renderFollowPanel() {
+
+  if (!state) return;
+
+  const myTurn =
+
+    state.phase === "play" &&
+
+    state.seat === state.turn &&
+
+    !state.actionTaken;
+
+  const previous = (state.turn + 4) % 5;
+
+  const available =
+
+    state.last?.player === previous
+
+      ? state.last.cards
+
+      : [];
+
+  const visible =
+
+    followMode && myTurn && available.length > 0;
+
+  $("followPanel").classList.toggle("hidden", !visible);
+
+  if (!visible) return;
+
+  $("followCards").innerHTML = available.map(c =>
+
+    cardHTML(c, {
+
+      selectable: true,
+
+      selected: selectedFollow.has(c)
+
+    })
+
+  ).join("");
+
+  $("followCards")
+
+    .querySelectorAll("[data-card]")
+
+    .forEach(el => {
+
+      el.onclick = () => {
+
+        const c = Number(el.dataset.card);
+
+        if (selectedFollow.has(c)) {
+
+          selectedFollow.delete(c);
+
+        } else if (selectedFollow.size < 3) {
+
+          selectedFollow.add(c);
+
+        } else {
+
+          toast("เลือกตามไพ่ได้สูงสุด 3 ใบ");
+
+        }
+
+        renderFollowSelection();
+
+      };
+
+    });
+
+  $("followBtn").textContent = "✅ ยืนยันตามไพ่";
+
+}
+
+function render() {
+
+  if (!state) return;
+
+  const s = state;
+
+  $("setup").classList.add("hidden");
+
+  $("game").classList.remove("hidden");
+
+  $("roomLabel").textContent = s.code;
+
+  $("roundLabel").textContent = s.round;
+
+  $("deckCount").textContent = s.deckCount;
+
+  $("champagne").textContent = s.champagneMoney;
+
+  const myTurn =
+
+    s.phase === "play" && s.turn === s.seat;
+
+  const canTake =
+
+    myTurn && !s.actionTaken;
+
+  const canDiscard =
+
+    myTurn && s.actionTaken;
+
+  $("turnAlert").classList.toggle("hidden", !myTurn);
+
+  if (s.phase === "lobby") {
+
+    $("status").textContent =
+
+      "พร้อมเริ่มเกม — แจกไพ่คนละ 5 ใบ";
+
+  } else if (s.phase === "end") {
+
+    $("status").textContent =
+
+      s.result?.message || "จบรอบแล้ว";
+
+  } else if (myTurn && s.actionTaken) {
+
+    $("status").textContent =
+
+      "เลือกไพ่ 1–3 ใบในมือ แล้วกดทิ้งไพ่";
+
+  } else if (myTurn) {
+
+    $("status").textContent =
+
+      "ถึงตาคุณ: เลือกแคง ตามไพ่ หรือหยิบไพ่";
+
+  } else {
+
+    $("status").textContent =
+
+      `กำลังรอ ${s.players[s.turn]?.name || "ผู้เล่น"}`;
+
+  }
+
+  $("seats").innerHTML = s.players.map((p, i) => {
+
+    const pos = (i - s.seat + 5) % 5;
+
+    return `
+
+      <div
+
+        class="seat
+
+          ${i === s.seat ? "me" : ""}
+
+          ${s.phase === "play" && i === s.turn
+
+            ? "current" : ""}"
+
+        data-pos="${pos}"
+
+      >
+
+        <div class="player-name">
+
+          ${escapeHTML(p.name)}
+
+          ${p.bot ? "🤖" : p.online ? "🟢" : "⚪"}
+
+        </div>
+
+        <div class="credit">
+
+          💰 ${p.credits}
+
+        </div>
+
+        <div>🂠 ${p.cardCount} ใบ</div>
+
+        <div class="pile">
+
+          ${p.discards.map(c =>
+
+            cardHTML(c, { tiny: true })
+
+          ).join("")}
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+  $("handCount").textContent =
+
+    `(${s.hand.length} ใบ)`;
+
+  $("hand").innerHTML = s.hand.map(c =>
+
+    cardHTML(c, {
+
+      selectable: true,
+
+      selected: selectedHand.has(c)
+
+    })
+
+  ).join("");
+
+  $("hand")
+
+    .querySelectorAll("[data-card]")
+
+    .forEach(el => {
+
+      el.onclick = () => {
+
+        const c = Number(el.dataset.card);
+
+        if (selectedHand.has(c)) {
+
+          selectedHand.delete(c);
+
+        } else {
+
+          selectedHand.add(c);
+
+        }
+
+        renderHandSelection();
+
+      };
+
+    });
+
+  const previous = (s.turn + 4) % 5;
+
+  const available =
+
+    s.last?.player === previous
+
+      ? s.last.cards
+
+      : [];
+
+  $("kangBtn").disabled = !canTake;
+
+  $("drawBtn").disabled = !canTake || s.deckCount === 0;
+
+  $("followBtn").disabled =
+
+    !canTake || available.length === 0;
+
+  $("discardBtn").disabled = !canDiscard;
+
+  $("followBtn").textContent = "🃏 ตามไพ่";
+
+  renderFollowPanel();
+
+  $("startBtn").classList.toggle(
+
+    "hidden",
+
+    s.phase !== "lobby"
+
+  );
+
+  $("nextBtn").classList.toggle(
+
+    "hidden",
+
+    s.phase !== "end"
+
+  );
+
+  $("centerMessage").textContent =
+
+    s.phase === "end"
+
+      ? "🏆 จบรอบ"
+
+      : "CASINO EDITION";
+
+  renderVote();
+
+  renderResult();
+
+  $("gameLog").innerHTML = s.log.map(
+
+    line => `<div>${escapeHTML(line)}</div>`
+
+  ).join("");
+
+  $("gameLog").scrollTop =
+
+    $("gameLog").scrollHeight;
+
+  $("ledger").innerHTML = [...s.ledger]
+
+    .reverse()
+
+    .map(x => `
+
+      <div>
+
+        รอบ ${x.round}:
+
+        ${escapeHTML(x.from)}
+
+        →
+
+        ${escapeHTML(x.to)}
+
+        ${x.amount} เครดิต
+
+        (${escapeHTML(x.reason)})
+
+      </div>
+
+    `).join("");
+
+}
+
+function renderVote() {
+
+  const vote = state.vote;
+
+  $("votePanel").classList.toggle(
+
+    "hidden",
+
+    !vote
+
+  );
+
+  if (!vote) return;
+
+  $("votePanel").innerHTML = `
+
+    <strong>
+
+      🎲 ${escapeHTML(vote.requester)}
+
+      ขอจับที่นั่งใหม่
+
+    </strong>
+
+    <p>
+
+      อนุมัติ ${vote.approvals.length}
+
+      จาก ${vote.required.length} คน
+
+    </p>
+
+    <div class="flex">
+
+      <button id="approveBtn" class="green">
+
+        ✅ อนุมัติ
+
+      </button>
+
+      <button id="rejectBtn" class="danger">
+
+        ❌ ปฏิเสธ
+
+      </button>
+
+    </div>
+
+  `;
+
+  $("approveBtn").onclick =
+
+    () => send("approveSeats");
+
+  $("rejectBtn").onclick =
+
+    () => send("rejectSeats");
+
+}
+
+function renderResult() {
+
+  const finished = state.phase === "end";
+
+  $("resultPanel").classList.toggle(
+
+    "hidden",
+
+    !finished
+
+  );
+
+  if (!finished) return;
+
+  const r = state.result;
+
+  $("resultPanel").innerHTML = `
+
+    <div class="win">
+
+      ${escapeHTML(r?.message || "จบรอบ")}
+
+    </div>
+
+    <p>
+
+      ประเภทไพ่: ${escapeHTML(r?.category || "ธรรมดา")}
+
+      <br>
+
+      ${r?.failed
+
+        ? "ผู้แคงผิดจ่ายรวม"
+
+        : "ผู้แพ้แต่ละคนจ่าย"}
+
+      <strong>${r?.amount || 0}</strong>
+
+      เครดิต
+
+    </p>
+
+    <strong>🃏 เปิดไพ่ทุกคน</strong>
+
+    ${(state.showdown || []).map(p => `
+
+      <p>
+
+        ${escapeHTML(p.name)}
+
+        (${p.count} ใบ, ${p.points} แต้ม)
+
+        <br>
+
+        ${p.hand.map(c =>
+
+          cardHTML(c, { tiny: true })
+
+        ).join(" ")}
+
+      </p>
+
+    `).join("")}
+
+  `;
+
+}
+
+$("kangBtn").onclick = () => {
+
+  if (confirm("ยืนยันประกาศแคง?")) {
+
+    send("kang");
+
+  }
+
+};
+
+$("drawBtn").onclick = () => {
+
+  send("draw");
+
+};
+
+$("followBtn").onclick = () => {
+
+  if (!followMode) {
+
+    followMode = true;
+
+    selectedFollow.clear();
+
+    renderFollowPanel();
+
+    return;
+
+  }
+
+  if (!selectedFollow.size) {
+
+    toast("กรุณาเลือกไพ่ที่จะตามก่อน");
+
+    return;
+
+  }
+
+  send("follow", {
+
+    cards: [...selectedFollow]
+
+  });
+
+};
+
+$("cancelFollowBtn").onclick = () => {
+
+  followMode = false;
+
+  selectedFollow.clear();
+
+  $("followPanel").classList.add("hidden");
+
+  $("followBtn").textContent = "🃏 ตามไพ่";
+
+};
+
+$("discardBtn").onclick = () => {
+
+  const cards = [...selectedHand];
+
+  if (cards.length < 1 || cards.length > 3) {
+
+    toast("เลือกไพ่ที่จะทิ้ง 1–3 ใบ");
+
+    return;
+
+  }
+
+  if (
+
+    cards.length > 1 &&
+
+    new Set(cards.map(c => c % 13)).size !== 1
+
+  ) {
+
+    toast("ทิ้งหลายใบพร้อมกันต้องเป็นไพ่หน้าเดียวกัน");
+
+    return;
+
+  }
+
+  send("discard", { cards });
+
+};
+
+$("startBtn").onclick = () => send("start");
+
+$("nextBtn").onclick = () => send("next");
+
+$("shuffleBtn").onclick = () => {
+
+  if (confirm("ต้องการขอจับที่นั่งใหม่ใช่หรือไม่?")) {
+
+    send("requestSeats");
+
+  }
+
+};
+
+$("creditButtons").innerHTML =
+
+  [100, 200, 300, 400, 500]
+
+    .map(n => `
+
+      <button data-credit="${n}">
+
+        +${n}
+
+      </button>
+
+    `).join("");
+
+$("creditButtons")
+
+  .querySelectorAll("[data-credit]")
+
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      send("credit", {
+
+        amount: Number(button.dataset.credit)
+
+      });
+
+    };
+
+  });
+
+$("sendChatBtn").onclick = () => {
+
+  const text = $("chatInput").value.trim();
+
+  if (!text) return;
+
+  if (send("chat", { text })) {
+
+    $("chatInput").value = "";
+
+  }
+
+};
+
+$("chatInput").onkeydown = event => {
+
+  if (event.key === "Enter") {
+
+    $("sendChatBtn").click();
+
+  }
+
+};
+
+if (identity?.code) {
+
+  $("roomInput").value = identity.code;
+
+  connect("join");
+
+}
+
+</script>
+
+</body>
+
+</html>
