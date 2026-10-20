@@ -1,0 +1,887 @@
+<!doctype html>
+
+<html lang="th">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>KANG ONLINE V14.5</title>
+
+<style>
+
+:root{font-family:system-ui,-apple-system,sans-serif;color:#f6efd9;background:#07180f;color-scheme:dark}
+
+*{box-sizing:border-box}
+
+body{margin:0;padding:12px 10px 55px;min-height:100vh;background:radial-gradient(circle at top,#266345,#061b12 75%)}
+
+h1{text-align:center;color:#ffe09d;font-size:clamp(26px,6vw,39px);margin:8px 0 0;letter-spacing:1px}
+
+h2{color:#ffdb90;font-size:19px;margin:6px 0 12px}h3{color:#ffdb90;font-size:16px}
+
+p{line-height:1.5}.subtitle{text-align:center;font-size:12px;color:#c5d8c9;margin:2px 0 15px}
+
+.hidden{display:none!important}.panel{max-width:900px;margin:12px auto;padding:15px;border:1px solid #bca06c;border-radius:15px;background:#102c20f5}
+
+.flex{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.flex>*{flex:1}.small{font-size:12px;color:#ced7cf}
+
+button{padding:11px 9px;border:1px solid #c5a46b;border-radius:10px;background:linear-gradient(#775b35,#3d2c17);color:#fff;font-size:14px;font-weight:800;cursor:pointer;touch-action:manipulation}
+
+button.green{background:linear-gradient(#379669,#125037)}button.gold{background:linear-gradient(#e0b95f,#895a20)}button.red{background:linear-gradient(#bd4e56,#671b2b)}button:disabled{opacity:.36;cursor:not-allowed}
+
+input{width:100%;min-width:0;padding:12px;border:1px solid #86a892;border-radius:10px;background:#09251b;color:white;font-size:16px}
+
+label{display:block;margin:8px 0 4px}.choice{padding:13px;margin:10px 0;border:1px solid #b9a273;border-radius:12px;background:#18412e}.choice>button{width:100%}
+
+.notice{padding:11px;margin:10px 0;border-radius:10px;background:#28533c;font-size:13px}.alert{padding:12px;margin:9px 0;background:#a82232;border-radius:11px;text-align:center;font-weight:900;font-size:18px}
+
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.stat{padding:9px 3px;text-align:center;border:1px solid #486c55;background:#193e2f;border-radius:9px;font-size:11px}.stat strong{display:block;font-size:21px;color:#ffe6a7}
+
+.money{font-size:30px;color:#ffe29d;font-weight:900;text-align:center}.topups{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.topups button{font-size:12px;padding:10px 1px}
+
+.table{position:relative;width:100%;max-width:850px;height:clamp(430px,85vw,610px);margin:24px auto;border:11px solid #805e34;outline:3px solid #c7a468;border-radius:46% / 42%;background:radial-gradient(ellipse,#198252,#08472d 75%);box-shadow:0 15px 30px #000a;overflow:hidden}
+
+.seat{position:absolute;transform:translate(-50%,-50%);width:clamp(94px,23vw,157px);min-height:77px;padding:6px 3px;border:2px solid #bfa66d;border-radius:12px;background:#082e23f2;font-size:11px;text-align:center;box-shadow:0 4px 8px #0007}
+
+.seat[data-pos="0"]{left:50%;top:85%}.seat[data-pos="1"]{left:14%;top:68%}.seat[data-pos="2"]{left:23%;top:26%}.seat[data-pos="3"]{left:50%;top:12%}.seat[data-pos="4"]{left:77%;top:26%}.seat[data-pos="5"]{left:86%;top:68%}
+
+.seat.current{border-color:#ffdf60;box-shadow:0 0 16px 4px #e9c641}.seat.me{border-color:#71ffa4}.seat.me.current{border-color:#ff4545;box-shadow:0 0 18px #ff3c3c}
+
+.name{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.credit{color:#ffe297;font-weight:800;margin:3px 0}.pile{display:flex;justify-content:center;gap:2px;flex-wrap:wrap;max-height:55px;overflow-y:auto}
+
+.centerPile{position:absolute;top:48%;left:50%;width:46%;transform:translate(-50%,-50%);text-align:center;color:#ffdf9d;font-size:12px;pointer-events:none}
+
+.card{display:inline-flex;justify-content:center;align-items:center;min-width:43px;height:62px;border:2px solid #eee;border-radius:6px;background:#fff;color:#111;font-size:19px;font-weight:900;box-shadow:0 3px 6px #0006;user-select:none;pointer-events:none}.card.redSuit{color:#d5273c}.card.tiny{min-width:22px;height:29px;font-size:10px;border-width:1px;border-radius:3px}
+
+.hand{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:15px 2px 8px;min-height:88px}.cardBtn{padding:4px;border:0;background:transparent}.cardBtn.selected{background:#f9d96b33;box-shadow:0 0 15px #ffe06f}.cardBtn.selected .card{transform:translateY(-6px);border-color:#ffd76b}
+
+.actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:12px 0}.actions button{padding:12px 2px;font-size:clamp(13px,3.3vw,17px)}.ready{animation:pulse 1s infinite}@keyframes pulse{50%{box-shadow:0 0 20px #ffd369}}
+
+.scroll{max-height:210px;overflow-y:auto;overflow-wrap:anywhere;font-size:12px;line-height:1.9}details{margin-top:11px}summary{color:#ffde94;font-weight:800}
+
+#toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:92%;padding:14px;border-radius:10px;z-index:101;background:#9b2739;box-shadow:0 6px 20px #000b;text-align:center}
+
+#effect{position:fixed;inset:0;background:#0008;z-index:90;display:flex;align-items:center;justify-content:center;pointer-events:none}#effectInner{width:min(90vw,450px);padding:22px 12px;text-align:center;background:#0b281b;border:5px solid gold;border-radius:20px}#effectTitle{font-size:35px;font-weight:900}
+
+.rainbow{animation:rainbow .8s linear infinite}.blackEffect{animation:blackEffect .65s infinite}@keyframes rainbow{0%{border-color:#f44;box-shadow:0 0 16px #f44}25%{border-color:#fdbb45;box-shadow:0 0 16px #fdbb45}50%{border-color:#5f7;box-shadow:0 0 16px #5f7}75%{border-color:#39b6ff;box-shadow:0 0 16px #39b6ff}100%{border-color:#b76aff;box-shadow:0 0 16px #b76aff}}@keyframes blackEffect{50%{background:#111;border-color:#777}}
+
+@media(prefers-reduced-motion:reduce){.rainbow,.blackEffect,.ready{animation:none}}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>♠ KANG ONLINE ♥</h1>
+
+<div class="subtitle">V14.5 · สมาชิก 2–6 คน · ห้องไม่มี Bot / ห้องพร้อม Bot</div>
+
+<section class="panel" id="home">
+
+  <h2>🎮 เลือกโหมด</h2>
+
+  <div class="choice">
+
+    <h3>👤 MEMBER MODE</h3>
+
+    <p class="small">สร้างห้องส่วนตัว 2–6 คน ไม่มี Bot หรือเลือกห้องพร้อม Bot ได้</p>
+
+    <button id="memberMode" class="green">เข้าสู่ระบบ / สมัครสมาชิก</button>
+
+  </div>
+
+  <div class="choice">
+
+    <h3>🤖 GUEST MODE</h3>
+
+    <p class="small">ทดลองเล่นกับ Bot ใช้เครดิตจำลองภายในห้อง</p>
+
+    <button id="guestMode">เล่น Guest</button>
+
+  </div>
+
+  <p id="connection" class="small">กำลังเชื่อมต่อ...</p>
+
+</section>
+
+<section class="panel hidden" id="auth">
+
+  <h2>👤 บัญชีสมาชิก</h2>
+
+  <label for="username">ชื่อผู้ใช้</label>
+
+  <input id="username" maxlength="24" autocomplete="username" placeholder="ภาษาอังกฤษ ตัวเลข หรือ _">
+
+  <label for="password">รหัสผ่าน</label>
+
+  <input id="password" type="password" autocomplete="current-password" placeholder="อย่างน้อย 8 ตัวอักษร">
+
+  <div class="flex" style="margin-top:12px">
+
+    <button class="green" id="login">เข้าสู่ระบบ</button>
+
+    <button id="register">สมัครสมาชิก</button>
+
+  </div>
+
+  <button id="authBack" style="width:100%;margin-top:10px">← กลับหน้าแรก</button>
+
+</section>
+
+<section class="panel hidden" id="lobby">
+
+  <h2 id="lobbyTitle">🏠 เลือกห้อง</h2>
+
+  <div class="hidden" id="profileBox">
+
+    <p class="notice">👤 สมาชิก: <strong id="memberName">—</strong></p>
+
+    <div class="stats">
+
+      <div class="stat"><strong id="balance">0</strong>เครดิต</div>
+
+      <div class="stat"><strong id="games">0</strong>รอบ</div>
+
+      <div class="stat"><strong id="wins">0</strong>ชนะ</div>
+
+      <div class="stat"><strong id="losses">0</strong>แพ้</div>
+
+    </div>
+
+    <div id="lobbyCredit"></div>
+
+    <details><summary>📒 ประวัติการเล่น</summary><div id="history" class="scroll"></div></details>
+
+    <details><summary>💳 ประวัติเครดิต</summary><div id="creditHistory" class="scroll"></div></details>
+
+    <button id="refresh">🔄 อัปเดตข้อมูลสมาชิก</button>
+
+  </div>
+
+  <div id="guestNameBox">
+
+    <label for="guestName">ชื่อ Guest</label>
+
+    <input id="guestName" maxlength="24" placeholder="ชื่อผู้เล่น">
+
+  </div>
+
+  <h3>สร้างห้องใหม่</h3>
+
+  <button id="createFriends" class="green" style="width:100%;margin-bottom:9px">👥 สร้างห้องส่วนตัว ไม่มี Bot (2–6 คน)</button>
+
+  <button id="createBot" class="gold" style="width:100%">🤖 สร้างห้องพร้อม Bot (รวมไม่เกิน 6 คน)</button>
+
+  <p class="small">ห้องส่วนตัวเริ่มได้ตั้งแต่ 2 คน เจ้าของห้องเป็นผู้กดเริ่ม</p>
+
+  <h3>เข้าห้องของเพื่อน</h3>
+
+  <input id="roomInput" maxlength="6" placeholder="รหัสห้อง 6 ตัว">
+
+  <button id="join" class="gold" style="width:100%;margin-top:8px">🚪 เข้าห้อง</button>
+
+  <button id="lobbyBack" style="width:100%;margin-top:12px">← กลับหน้าแรก</button>
+
+  <button id="logout" class="red hidden" style="width:100%;margin-top:9px">ออกจากระบบสมาชิก</button>
+
+</section>
+
+<div id="game" class="hidden">
+
+  <section class="panel">
+
+    <div class="flex">
+
+      <div style="min-width:150px">ห้อง <strong id="roomCode">—</strong> · รอบ <strong id="round">0</strong><div id="roomKind" class="small"></div></div>
+
+      <button id="copyCode">📋 คัดลอกรหัส</button>
+
+      <button id="leave" class="red">🚪 ออกห้อง</button>
+
+    </div>
+
+    <div id="status" class="notice">กำลังโหลด...</div>
+
+    <div id="turnAlert" class="alert hidden">🔴 ถึงตาคุณแล้ว!</div>
+
+    <div id="waiting" class="notice hidden"></div>
+
+    <div id="followInfo" class="notice hidden"></div>
+
+    <div id="countdown" class="small" style="text-align:center"></div>
+
+  </section>
+
+  <div class="table">
+
+    <div class="centerPile">🂠 กองจั่ว<div style="font-size:24px"><strong id="deck">0</strong></div>ใบ<div id="centerMessage" style="margin-top:12px">KANG ONLINE</div></div>
+
+    <div id="seats"></div>
+
+  </div>
+
+  <section class="panel">
+
+    <h2>🃏 ไพ่ของฉัน <span id="handCount"></span></h2>
+
+    <div class="hand" id="hand"></div>
+
+    <div class="actions">
+
+      <button id="kang">แคง</button>
+
+      <button id="draw">จั่ว</button>
+
+      <button id="follow">ไหล</button>
+
+      <button id="discard">ทิ้ง</button>
+
+    </div>
+
+    <div class="notice">✨ ไหลจนหมดมือ: ผู้เริ่มสายไหลจ่ายผู้ชนะ 10 เครดิต · ไหลครบวงโดยไม่มีใครหมดมือ: ผู้เริ่มสายไหลจ่ายผู้ไหลทุกคน คนละ 10 เครดิต</div>
+
+    <div class="flex">
+
+      <button id="start" class="green">▶️ เริ่มเกม</button>
+
+      <button id="next" class="green hidden">🔄 รอบถัดไป</button>
+
+      <button id="shuffleSeats">🎲 เปลี่ยนที่นั่ง</button>
+
+    </div>
+
+    <div id="vote" class="notice hidden"></div>
+
+    <div id="result" class="notice hidden"></div>
+
+  </section>
+
+  <section class="panel">
+
+    <h2>💰 ระบบเครดิต</h2><div id="gameCredit"></div>
+
+    <p class="small">🥂 Champagne Money: <strong id="champagne">0</strong></p>
+
+    <h2>💬 แชต</h2><div id="chatList" class="scroll"></div>
+
+    <div class="flex"><input id="chatText" maxlength="300" placeholder="พิมพ์ข้อความ..."><button id="sendChat">ส่ง</button></div>
+
+    <details open><summary>📒 ประวัติเครดิตในห้อง</summary><div id="ledger" class="scroll"></div></details>
+
+  </section>
+
+</div>
+
+<div id="effect" class="hidden"><div id="effectInner"><div id="effectTitle"></div><div id="effectSub"></div></div></div>
+
+<div id="toast" role="alert"></div>
+
+<script>
+
+'use strict';
+
+const $ = id => document.getElementById(id);
+
+let ws = null, game = null, profileData = null, mode = null;
+
+let selected = new Set(), reconnectDelay = 1000, effectKey = '', effectTimer = null;
+
+let memberToken = localStorage.getItem('kangMemberToken');
+
+let savedRoom = null;
+
+try { savedRoom = JSON.parse(sessionStorage.getItem('kangRoomV145') || 'null'); }
+
+catch { savedRoom = null; }
+
+$('guestName').value = localStorage.getItem('kangGuestName') || '';
+
+function html(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({
+
+  '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+
+})[c]); }
+
+const money = x => Number(x || 0).toLocaleString('en-US');
+
+function toast(message) {
+
+  $('toast').textContent = message;
+
+  $('toast').style.display = 'block';
+
+  clearTimeout(toast.timer);
+
+  toast.timer = setTimeout(() => { $('toast').style.display = 'none'; }, 3500);
+
+}
+
+function screen(name) {
+
+  for (const id of ['home','auth','lobby','game']) $(id).classList.toggle('hidden', id !== name);
+
+}
+
+function send(action, other = {}) {
+
+  if (!ws || ws.readyState !== WebSocket.OPEN) { toast('กำลังเชื่อมต่อ...'); return false; }
+
+  ws.send(JSON.stringify({ action, ...other }));
+
+  return true;
+
+}
+
+function connect() {
+
+  const socket = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host);
+
+  ws = socket;
+
+  socket.onopen = () => {
+
+    if (ws !== socket) return;
+
+    reconnectDelay = 1000;
+
+    $('connection').textContent = '🟢 เชื่อมต่อแล้ว';
+
+    if (memberToken) send('resume', { token: memberToken });
+
+    else if (savedRoom?.mode === 'guest') {
+
+      mode = 'guest';
+
+      send('join', { code: savedRoom.code, token: savedRoom.token, name: $('guestName').value || 'Guest' });
+
+    }
+
+  };
+
+  socket.onmessage = event => {
+
+    if (ws !== socket) return;
+
+    try { receive(JSON.parse(event.data)); } catch(e) { console.error(e); }
+
+  };
+
+  socket.onclose = () => {
+
+    if (ws !== socket) return;
+
+    $('connection').textContent = '🔴 การเชื่อมต่อขาด กำลังลองใหม่';
+
+    setTimeout(connect, reconnectDelay);
+
+    reconnectDelay = Math.min(10000, reconnectDelay * 2);
+
+  };
+
+}
+
+function lobby() {
+
+  screen('lobby');
+
+  const member = mode === 'member';
+
+  $('lobbyTitle').textContent = member ? '👤 Member Lobby' : '🤖 Guest Lobby';
+
+  $('profileBox').classList.toggle('hidden', !member);
+
+  $('guestNameBox').classList.toggle('hidden', member);
+
+  $('createFriends').classList.toggle('hidden', !member);
+
+  $('logout').classList.toggle('hidden', !member);
+
+  if (member) send('profile');
+
+}
+
+function clearSavedRoom() { savedRoom = null; sessionStorage.removeItem('kangRoomV145'); }
+
+function receive(data) {
+
+  if (data.type === 'error') {
+
+    toast(data.message);
+
+    if (data.message.includes('ไม่พบห้อง')) { clearSavedRoom(); game = null; lobby(); }
+
+    if (data.message.includes('เซสชันหมดอายุ')) {
+
+      memberToken = null; localStorage.removeItem('kangMemberToken'); screen('auth');
+
+    }
+
+    return;
+
+  }
+
+  if (data.type === 'notice') return toast(data.message);
+
+  if (data.type === 'auth') {
+
+    memberToken = data.token;
+
+    localStorage.setItem('kangMemberToken', memberToken);
+
+    $('password').value = '';
+
+    mode = 'member';
+
+    if (savedRoom?.mode === 'member') send('join', { code: savedRoom.code });
+
+    else lobby();
+
+    return;
+
+  }
+
+  if (data.type === 'profile') { profileData = data; renderProfile(); return; }
+
+  if (data.type === 'identity') {
+
+    savedRoom = { code: data.code, mode: data.mode, token: data.token };
+
+    sessionStorage.setItem('kangRoomV145', JSON.stringify(savedRoom));
+
+    return;
+
+  }
+
+  if (data.type === 'loggedOut') {
+
+    memberToken = null; profileData = null; mode = null;
+
+    localStorage.removeItem('kangMemberToken'); clearSavedRoom(); screen('home'); return;
+
+  }
+
+  if (data.type === 'left') {
+
+    game = null; selected.clear(); clearSavedRoom();
+
+    $('effect').classList.add('hidden'); lobby(); return;
+
+  }
+
+  if (data.type === 'state') {
+
+    if (!game || game.round !== data.round || game.turn !== data.turn || game.phase !== data.phase) selected.clear();
+
+    game = data; mode = data.mode;
+
+    for (const c of [...selected]) if (!data.hand.includes(c)) selected.delete(c);
+
+    renderGame(); showEffect();
+
+  }
+
+}
+
+function creditMarkup(balance, member, pending = false) {
+
+  return `<div class="choice">
+
+    <div class="small" style="text-align:center">เครดิตปัจจุบัน</div>
+
+    <div class="money">${money(balance)}</div>
+
+    ${pending ? '<p class="notice">⏳ รีเซ็ตเมื่อจบรอบ · เครดิตที่เติมหลังขอรีเซ็ตจะยังอยู่</p>' : ''}
+
+    <h3>➕ เติมเครดิตจำลอง</h3>
+
+    <div class="topups">${[100,200,300,400,500].map(n =>
+
+      `<button class="green" data-add="${n}">+${n}</button>`).join('')}</div>
+
+    ${member ? `<button data-reset class="red" style="width:100%;margin-top:9px">🔄 รีเซ็ตเครดิตเป็น 0</button>
+
+    <p class="small">หากรีเซ็ตระหว่างรอบจะมีผลหลังจบรอบ เติมใหม่หลังขอรีเซ็ตได้ทันที</p>` :
+
+    '<p class="small">เครดิต Guest ใช้ภายในห้องเท่านั้น</p>'}
+
+  </div>`;
+
+}
+
+function bindCredit(container) {
+
+  container.querySelectorAll('[data-add]').forEach(button => {
+
+    button.onclick = () => send(mode === 'member' ? 'topup' : 'guestCredit',
+
+      { amount: Number(button.dataset.add) });
+
+  });
+
+  const reset = container.querySelector('[data-reset]');
+
+  if (reset) reset.onclick = () => {
+
+    if (confirm('ยืนยันรีเซ็ตเครดิตเป็น 0?')) send('reset');
+
+  };
+
+}
+
+function renderProfile() {
+
+  if (!profileData?.member) return;
+
+  const p = profileData.member;
+
+  $('memberName').textContent = p.username;
+
+  $('balance').textContent = money(p.credits);
+
+  $('games').textContent = p.games;
+
+  $('wins').textContent = p.wins;
+
+  $('losses').textContent = p.losses;
+
+  $('history').innerHTML = (profileData.history || []).map(h =>
+
+    `<div>${h.outcome === 'win' ? '🏆 ชนะ' : 'แพ้'} · ห้อง ${html(h.room_code)} · รอบ ${h.round_number} · ${money(h.credit_change)} เครดิต</div>`).join('') || 'ยังไม่มีประวัติ';
+
+  $('creditHistory').innerHTML = (profileData.creditHistory || []).map(h =>
+
+    `<div>${html(h.reason)} (${money(h.amount)} เครดิต)</div>`).join('') || 'ยังไม่มีประวัติเครดิต';
+
+  $('lobbyCredit').innerHTML = creditMarkup(p.credits, true);
+
+  bindCredit($('lobbyCredit'));
+
+}
+
+$('memberMode').onclick = () => memberToken && profileData ? (mode = 'member', lobby()) : screen('auth');
+
+$('guestMode').onclick = () => {
+
+  if (memberToken) return toast('กรุณาออกจากบัญชีสมาชิกก่อน');
+
+  mode = 'guest'; lobby();
+
+};
+
+$('authBack').onclick = () => screen('home');
+
+$('login').onclick = () => send('login', { username: $('username').value.trim(), password: $('password').value });
+
+$('register').onclick = () => send('register', { username: $('username').value.trim(), password: $('password').value });
+
+function createRoom(kind) {
+
+  const name = $('guestName').value.trim() || 'Guest';
+
+  if (mode === 'guest') localStorage.setItem('kangGuestName', name);
+
+  send('create', { mode, kind, name });
+
+}
+
+$('createFriends').onclick = () => createRoom('human');
+
+$('createBot').onclick = () => createRoom('bot');
+
+$('join').onclick = () => {
+
+  const code = $('roomInput').value.trim().toUpperCase();
+
+  if (!/^[A-F\d]{6}$/.test(code)) return toast('กรุณาใส่รหัสห้อง 6 ตัว');
+
+  send('join', { code, name: $('guestName').value.trim() || 'Guest' });
+
+};
+
+$('refresh').onclick = () => send('profile');
+
+$('lobbyBack').onclick = () => screen('home');
+
+$('logout').onclick = () => { if (confirm('ออกจากระบบสมาชิก?')) send('logout', { token: memberToken }); };
+
+$('leave').onclick = () => { if (confirm('ออกจากห้องนี้?')) send('leave'); };
+
+$('copyCode').onclick = async () => {
+
+  if (!game) return;
+
+  try { await navigator.clipboard.writeText(game.code); toast('คัดลอกรหัสห้องแล้ว'); }
+
+  catch { toast('รหัสห้อง: ' + game.code); }
+
+};
+
+const suits = ['♠','♥','♦','♣'];
+
+const faces = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+function card(c, tiny = false) {
+
+  const s = Math.floor(c / 13);
+
+  return `<span class="card ${s === 1 || s === 2 ? 'redSuit' : ''} ${tiny ? 'tiny' : ''}">${faces[c % 13]}${suits[s]}</span>`;
+
+}
+
+const myTurn = () => game?.phase === 'play' && game.seat === game.turn && !game.auto;
+
+const canDraw = () => myTurn() && !game.drawn && !game.chain;
+
+function renderHand() {
+
+  const area = $('hand'); area.replaceChildren();
+
+  for (const c of game.hand) {
+
+    const b = document.createElement('button');
+
+    b.className = 'cardBtn' + (selected.has(c) ? ' selected' : '');
+
+    b.innerHTML = card(c);
+
+    b.onclick = () => { selected.has(c) ? selected.delete(c) : selected.add(c); renderHand(); };
+
+    area.appendChild(b);
+
+  }
+
+}
+
+function renderSeats() {
+
+  const g = game;
+
+  const effect = g.phase === 'end' && g.result?.effectUntil > Date.now();
+
+  $('seats').innerHTML = g.players.map((p, i) => {
+
+    const pos = (i - g.seat + 6) % 6;
+
+    if (!p) return `<div class="seat" data-pos="${pos}"><div class="name">💺 ที่นั่งว่าง</div><div class="small">รอเพื่อนเข้าห้อง</div></div>`;
+
+    return `<div class="seat ${i === g.seat ? 'me' : ''} ${g.phase === 'play' && g.turn === i ? 'current' : ''}
+
+      ${effect && g.result.winnerSeat === i ? 'rainbow' : ''} ${effect && g.result.overlaidSeat === i ? 'blackEffect' : ''}" data-pos="${pos}">
+
+      <div class="name">${p.id === g.ownerId ? '👑' : ''} ${i === g.dealer ? '🃏' : ''} ${html(p.name)} ${p.bot ? '🤖' : p.online ? '🟢' : '⚪'}</div>
+
+      <div class="credit">💰 ${money(p.credits)}</div><div>🂠 ${p.count} ใบ</div>
+
+      <div class="pile">${p.discards.map(c => card(c, true)).join('')}</div>
+
+      ${g.chain && g.origin === i ? '<div>🎯 เริ่มสายไหล</div>' : ''}
+
+      ${g.chain && g.followers.includes(i) ? '<div>✨ ไหลแล้ว</div>' : ''}
+
+      ${p.resetPending ? '<div>⏳ รอรีเซ็ต</div>' : ''}
+
+    </div>`;
+
+  }).join('');
+
+}
+
+function renderResult() {
+
+  const g = game; $('result').classList.toggle('hidden', g.phase !== 'end');
+
+  if (g.phase !== 'end') return;
+
+  const r = g.result || {};
+
+  $('result').innerHTML = `
+
+    <div class="money">${r.failed ? '💀 โดนทับ!' : '🏆 ' + html(r.winnerName) + ' ชนะ!'}</div>
+
+    <p>${html(r.reason)} · ${html(r.category)} · ${r.failed ? 'ผู้โดนทับจ่าย' : 'ผู้แพ้จ่ายคนละ'} ${r.amount || 0} เครดิต</p>
+
+    ${r.followBonus ? `<div class="notice">🎁 ${html(r.originName)} จ่ายโบนัสไหล 10 เครดิตให้ ${html(r.winnerName)}</div>` : ''}
+
+    <p>🃏 ผู้ชนะเป็นผู้แจกและเริ่มเล่นในรอบถัดไป</p>
+
+    ${g.saving ? '<p>⏳ กำลังบันทึกผล</p>' : ''}
+
+    ${g.saveError ? '<button id="retry">ลองบันทึกผลอีกครั้ง</button>' : ''}
+
+    <h3>เปิดไพ่ทุกคน</h3>
+
+    ${g.showdown.filter(Boolean).map(p => `<p><strong>${html(p.name)}</strong> · ${p.points} แต้ม<br>${p.hand.map(c => card(c, true)).join(' ')}</p>`).join('')}`;
+
+  if ($('retry')) $('retry').onclick = () => send('retry');
+
+}
+
+function renderGame() {
+
+  if (!game) return;
+
+  screen('game');
+
+  const g = game, owner = g.ownerId === g.myId, turn = myTurn();
+
+  $('roomCode').textContent = g.code;
+
+  $('round').textContent = g.round;
+
+  $('deck').textContent = g.deck;
+
+  $('champagne').textContent = money(g.champagne);
+
+  $('roomKind').textContent = g.kind === 'human' ? '👥 ห้องส่วนตัว ไม่มี Bot · 2–6 คน' : '🤖 ห้องพร้อม Bot · สูงสุด 6 คน';
+
+  $('turnAlert').classList.toggle('hidden', !turn);
+
+  $('waiting').classList.toggle('hidden', g.phase === 'play');
+
+  $('waiting').textContent = `สมาชิกจริง ${g.humanCount}/6 · ผู้เล่นในรอบ ${g.activeCount}/6 · ${owner ? 'คุณเป็นเจ้าของห้อง' : 'เจ้าของห้องเป็นผู้เริ่มเกม'}`;
+
+  $('status').textContent = g.phase === 'lobby' ?
+
+    (g.kind === 'human' && g.humanCount < 2 ? 'รอเพื่อนอย่างน้อย 2 คนก่อนเริ่มเกม' : 'พร้อมเริ่มเกมเมื่อทุกคนเติมเครดิตแล้ว') :
+
+    g.phase === 'end' ? `${g.result?.winnerName || ''} ชนะรอบนี้` :
+
+    g.auto ? '🤖 ระบบกำลังเล่นอัตโนมัติ' : turn ? '🔴 ถึงตาคุณแล้ว' : `รอ ${g.players[g.turn]?.name || 'ผู้เล่น'}`;
+
+  $('followInfo').classList.toggle('hidden', !g.chain);
+
+  if (g.chain && g.origin !== null) $('followInfo').textContent =
+
+    `✨ ${g.players[g.origin].name} เริ่มสายไหล · ไหลแล้ว ${g.followers.length}/${g.activeCount - 1} คน`;
+
+  renderSeats(); renderHand(); renderResult();
+
+  $('gameCredit').innerHTML = creditMarkup(g.players[g.seat].credits, g.mode === 'member', g.players[g.seat].resetPending);
+
+  bindCredit($('gameCredit'));
+
+  $('handCount').textContent = `(${g.hand.length} ใบ)`;
+
+  $('kang').disabled = !canDraw();
+
+  $('draw').disabled = !canDraw() || !g.deck;
+
+  $('follow').disabled = !(turn && g.followCards.length);
+
+  $('follow').classList.toggle('ready', turn && g.followCards.length > 0);
+
+  $('discard').disabled = !(turn && g.drawn && !g.chain);
+
+  $('start').classList.toggle('hidden', g.phase !== 'lobby');
+
+  $('next').classList.toggle('hidden', g.phase !== 'end');
+
+  $('start').disabled = !owner || (g.kind === 'human' && g.humanCount < 2);
+
+  $('next').disabled = !owner || g.saving || g.saveError || (g.kind === 'human' && g.humanCount < 2);
+
+  $('centerMessage').innerHTML = g.last ? `ไพ่ล่าสุด<div style="margin-top:5px">${g.last.cards.map(c => card(c,true)).join(' ')}</div>${turn && g.followCards.length ? '<b>✨ ไหลได้!</b>' : ''}` : 'KANG ONLINE';
+
+  $('chatList').innerHTML = g.chat.map(x => `<div><strong>${html(x.name)}:</strong> ${html(x.text)}</div>`).join('');
+
+  $('ledger').innerHTML = [...g.ledger].reverse().map(x =>
+
+    `<div>รอบ ${x.round}: ${html(x.from)} → ${html(x.to)} ${money(x.amount)} เครดิต (${html(x.reason)})</div>`).join('');
+
+  $('vote').classList.toggle('hidden', !g.votes);
+
+  if (g.votes) {
+
+    $('vote').innerHTML = `🎲 โหวตเปลี่ยนที่นั่ง ${g.votes.approvals.length}/${g.votes.required.length}<div class="flex"><button id="approve">อนุมัติ</button><button id="reject">ปฏิเสธ</button></div>`;
+
+    $('approve').onclick = () => send('voteShuffle');
+
+    $('reject').onclick = () => send('rejectShuffle');
+
+  }
+
+  updateClock();
+
+}
+
+function updateClock() {
+
+  if (!game || game.phase !== 'play' || !game.deadline) { $('countdown').textContent = ''; return; }
+
+  $('countdown').textContent = `⏳ เหลือเวลา ${Math.max(0, Math.ceil((game.deadline-Date.now())/1000))} วินาที`;
+
+}
+
+setInterval(updateClock, 500);
+
+function showEffect() {
+
+  if (game?.phase !== 'end' || !game.result || game.result.effectUntil <= Date.now()) return;
+
+  const key = `${game.code}-${game.round}`;
+
+  if (key === effectKey) return;
+
+  effectKey = key; clearTimeout(effectTimer);
+
+  $('effectInner').className = game.result.failed ? 'blackEffect' : 'rainbow';
+
+  $('effectTitle').textContent = game.result.failed ? '💀 โดนทับ!' : '🏆 ชนะแล้ว!';
+
+  $('effectSub').textContent = `${game.result.winnerName} · ${game.result.reason}`;
+
+  $('effect').classList.remove('hidden');
+
+  effectTimer = setTimeout(() => {
+
+    $('effect').classList.add('hidden'); if (game) renderSeats();
+
+  }, Math.max(0, game.result.effectUntil-Date.now()));
+
+}
+
+$('kang').onclick = () => { if (confirm('ยืนยันแคง?')) send('kang'); };
+
+$('draw').onclick = () => send('draw');
+
+$('follow').onclick = () => send('follow');
+
+$('discard').onclick = () => {
+
+  const cards = [...selected];
+
+  if (!cards.length) return toast('กรุณาเลือกไพ่ก่อนทิ้ง');
+
+  if (new Set(cards.map(c => c % 13)).size !== 1) return toast('ต้องทิ้งไพ่หน้าเดียวกัน');
+
+  send('discard', { cards });
+
+};
+
+$('start').onclick = () => send('start');
+
+$('next').onclick = () => send('next');
+
+$('shuffleSeats').onclick = () => { if (confirm('ขอเปลี่ยนที่นั่ง?')) send('voteShuffle'); };
+
+$('sendChat').onclick = () => {
+
+  const text = $('chatText').value.trim();
+
+  if (text && send('chat', { text })) $('chatText').value = '';
+
+};
+
+$('chatText').onkeydown = e => { if (e.key === 'Enter') $('sendChat').click(); };
+
+connect();
+
+</script>
+
+</body>
+
+</html>
